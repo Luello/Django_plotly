@@ -1,0 +1,13 @@
+.title {
+    text-align: center;
+    text-shadow: 0 0 4px #FF0000, 0 0 50px #FF0000, 0px 0px 14px #FF0000, 0 0 100px #FF0000, 0 0 150px #FF0000, 0 0 150px #FF0000, 0 0 550px #CA0000, 0 0 250px #CA0000, 0 0 350px #CA0000, 0 0 250px #CA0000;
+    color: #FFD000;
+    
+}
+
+body {
+    background-image: url("django-unchained-26340-1920x1080.jpg"); /* Assurez-vous que le chemin vers votre image est correct */
+    background-repeat: no-repeat; /* Pour éviter la répétition de l'image */
+    background-size: cover;
+    /* Vous pouvez également ajouter d'autres styles CSS ici */
+}
