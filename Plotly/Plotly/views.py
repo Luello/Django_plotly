@@ -1,6 +1,7 @@
 import plotly.express as px
 from django.shortcuts import render
-from .analyse import first_graph,fig,heat,boxplotsO,income ,elbow,PCA2D,PCA3D,WGF,YIW
+from .analyse import first_graph,fig,heat,boxplotsO,income ,elbow,PCA2D,PCA3D,figRFM, WGF,YIW
+
 
 def page_2(request):
     return render(request, 'page_2.html')
@@ -43,11 +44,14 @@ def plotly(request):
     elbow_html= elbow.to_html(full_html=False, include_plotlyjs=False)
     PCA2D_html= PCA2D.to_html(full_html=False, include_plotlyjs=False)
     PCA3D_html= PCA3D.to_html(full_html=False, include_plotlyjs=False)
+    figRFM_html=figRFM.to_html(full_html=False, include_plotlyjs=False)
+
     
     YIW_html=  YIW.to_html(full_html=False, include_plotlyjs=False)
     WGF_html= WGF.to_html(full_html=False, include_plotlyjs=False)
     
     
+
     return render(request, "plotly.html", {"bar_chart": bar_chart ,
                                            "scatter_chart" : scatter_chart, 
                                            "line_chart" : line_chart, 
@@ -60,7 +64,9 @@ def plotly(request):
                                            "elbow": elbow_html,
                                            "PCA2D":PCA2D_html,
                                            "PCA3D":PCA3D_html,
+
+                                           "figRFM":figRFM_html
                                            "YIW":YIW_html,
                                            "WGF":WGF_html
-                                           
+                   
                                            })
