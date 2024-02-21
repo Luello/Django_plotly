@@ -112,6 +112,36 @@
 
 </div>
 
+
+<h3 class="styled-heading" style="font-size: 35px;">
+    Identification graphique <span class="gradient-text"> des clusters </span> 
+</h3>
+<br><br><br>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3 class="styled-heading" style="font-size: 20px;">
+            Graphique 3D du Niveau de diplôme, de l'année de naissance <br> <span class="gradient-text"> et consommation de fruits</span> 
+        </h3>
+        {% autoescape off %}
+        {{ green_3D_1 }}
+        {% endautoescape %}
+    </div>
+    <div class="col-md-6">
+        <h3 class="styled-heading" style="font-size: 20px;">
+            Graphique 3D du Niveau de diplôme, de l'année de naissance <br> <span class="gradient-text"> et consommation de sucreries</span> 
+        </h3>
+        {% autoescape off %}
+        {{ green_3D_2 }}
+        {% endautoescape %}
+    </div>
+</div>
+</div>
+
+
+
+
+
 <section class="TEST">
     <div class="top">CLUSTERING</div>
     <div class="bottom" aria-hidden="true">CLUSTERING</div>
@@ -188,7 +218,7 @@
 
 
 <br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br>
+
     <div class="row">
     
         <div class="col-6">
@@ -215,6 +245,19 @@
         </div>
     
     
+        <h3 class="styled-heading">
+            <span class="gradient-text"> RFM </span>
+        </h3>
+        <div class="row justify-content-center">
+            <div class="col-md-6 d-flex justify-content-center"> <!-- Colonne pour le premier graphique -->
+                {% autoescape off %}
+                {{ figRFM }}
+                {% endautoescape %}
+            </div>
+        </div>
+        
+        
+        <br><br><br><br>
 
 
 

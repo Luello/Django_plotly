@@ -127,6 +127,76 @@ boxplotsO.add_trace(go.Box(x=data["sp_gold"], name="Gold"), row=3, col=2)
 boxplotsO.update_layout( height=1000, width=1200)
 
 
+## GRAPH 3D HUE
+
+education_mapping = {
+    'Graduation': 2,
+    'Basic': 1,
+    '2n Cycle': 3,
+    'Master': 4,
+    'PhD': 5
+}
+
+df=data.copy()
+df_numeric = df.select_dtypes(include=['int64', 'float64'])
+df_numeric = df_numeric[['Income', 'sp_wines', 'sp_fruits',
+                         'sp_meat', 'sp_fish', 'sp_sweet'
+                        ]]
+for col in df_numeric.columns:
+    decile_threshold = df[col].quantile(0.99)  
+    df = df[df[col] <= decile_threshold]
+
+
+
+# Mapper les valeurs de la colonne 'education' en utilisant le dictionnaire de mappage
+df['education_mapped'] = df['Education'].map(education_mapping)
+
+#sp_fruits
+green_3D_1 = go.Figure(data=[go.Scatter3d(
+    x=df['Income'],
+    y=df['Year_Birth'],
+    z=df['education_mapped'],
+    mode='markers',
+    marker=dict(
+        size=3,
+        color=df['sp_fruits'],       
+        colorscale='Greens', 
+        opacity=0.8
+))])
+
+green_3D_1.update_layout(scene=dict(
+                        xaxis_title='Income',
+                        yaxis_title='Year_Birth',
+                        zaxis_title='Education'))
+#sweet
+green_3D_1.update_layout(
+    width=1000,
+    height=800,
+    xaxis_showgrid=False,
+    yaxis_showgrid=False,)
+
+green_3D_2 = go.Figure(data=[go.Scatter3d(
+    x=df['Income'],
+    y=df['Year_Birth'],
+    z=df['education_mapped'],
+    mode='markers',
+    marker=dict(
+        size=3,
+        color=df['sp_sweet'],       
+        colorscale='Greens', 
+        opacity=0.8
+))])
+green_3D_2.update_layout(
+    width=1000,
+    height=800,
+    xaxis_showgrid=False,
+    yaxis_showgrid=False,)
+green_3D_2.update_layout(scene=dict(
+                        xaxis_title='Income',
+                        yaxis_title='Year_Birth',
+                        zaxis_title='Education'))
+
+
 ################################CLUSTERING#############################
 from sklearn.preprocessing import StandardScaler, normalize
 from sklearn import metrics
@@ -256,7 +326,7 @@ df_fig = pd.DataFrame({
     'color': ["Green","Orange","Purple","Maroon","Pink","Teal"]
 })
 
-# Créez un diagramme de "trésors"(mdrr) avec Plotly Express
+# Créez un diagramme de "trésors"(mdrrRRRR) avec Plotly Express
 figRFM = px.treemap(df_fig, 
                  path=['label'], 
                  values='size',
@@ -264,8 +334,8 @@ figRFM = px.treemap(df_fig,
                  color_discrete_map={i: c for i, c in enumerate(["Green","Orange","Purple","Maroon","Pink","Teal"])})
 
 figRFM.update_layout(
-                        width=800, 
-                        height=500
+                        width=1200, 
+                        height=800
                     )
 
 ##################################################################################################
@@ -313,7 +383,7 @@ X['Cluster'] = kmeans.labels_
 YIW = px.scatter_3d(data, x='Income', y='MntWines', z='Year_Birth', color='Cluster',
                      labels={'Cluster': 'Cluster'},
                      color_discrete_map={'0': 'red', '1': 'blue', '2': 'green', '3': 'yellow'},
-                     title='Graphique 3D des Clusters avec KMeans')
+                   )
 
 YIW.add_trace(px.scatter_3d(cluster_centers, x='Income', y='MntWines', z='Year_Birth').data[0])
 
