@@ -165,32 +165,29 @@ elbow.update_layout(
 pca = PCA(n_components=2)
 X_pca = pca.fit_transform(df_encoded)
 
-# Créer un DataFrame avec les données PCA
 df_pca = pd.DataFrame(data=X_pca, columns=['PC1', 'PC2'])
 
-# K-means clustering avec 3 clusters
 kmeans = KMeans(n_clusters=3)
 kmeans.fit(df_pca)
-df_pca['Cluster'] = kmeans.labels_.astype(str)  # Convertir les étiquettes en chaînes de caractères
+df_pca['Cluster'] = kmeans.labels_.astype(str)  
 
-# Créer le graphique 2D avec Plotly Express
 PCA2D = px.scatter(df_pca, x='PC1', y='PC2', color='Cluster', title='PCA + Clustering',
                  labels={'PC1': 'Principal Component 1', 'PC2': 'Principal Component 2'},
                  color_discrete_sequence=px.colors.qualitative.Set1)
-
-# Réduire à 3 dimensions pour visualisation
+PCA2D.update_layout(
+    width=1000,
+    height=800
+)
+#PCA3D
 pca_3d = PCA(n_components=3)
 X_pca_3d = pca_3d.fit_transform(df_encoded)
 
-# Créer un DataFrame avec les données PCA 3D
 df_pca_3d = pd.DataFrame(data=X_pca_3d, columns=['PC1', 'PC2', 'PC3'])
 
-# K-means clustering avec 4 clusters
 kmeans_3d = KMeans(n_clusters=4)
 kmeans_3d.fit(df_pca_3d)
 df_pca_3d['Cluster'] = kmeans_3d.labels_
 
-# Créer le graphique 3D avec Plotly
 PCA3D = go.Figure(data=[go.Scatter3d(
     x=df_pca_3d['PC1'],
     y=df_pca_3d['PC2'],
@@ -199,9 +196,65 @@ PCA3D = go.Figure(data=[go.Scatter3d(
     marker=dict(color=df_pca_3d['Cluster'], colorscale='Viridis', size=5),
 )])
 
-# Ajouter des étiquettes aux axes
 PCA3D.update_layout(scene=dict(
                     xaxis_title='PC1',
                     yaxis_title='PC2',
-                    zaxis_title='PC3'),
+                    zaxis_title='PC3'), width=1000,
+    height=800
                   )
+
+
+##################################################################################################
+############### Reprise du df
+#################################################################################################
+#GRAPH WGF
+data= pd.read_csv(f"{BASE_DIR}\\Plotly\\staticfiles\\static\\marketing_campaign.csv",sep="\t")  
+data = data[(data["Income"]<400000)&(data["Year_Birth"]>1920)]
+data.dropna(inplace=True)
+
+
+X = data[['MntGoldProds', 'MntFishProducts', 'MntWines']]
+kmeans = KMeans(n_clusters=4) 
+
+kmeans.fit(X)
+data['Cluster'] = kmeans.labels_
+cluster_stats = data.groupby('Cluster')[['MntGoldProds', 'MntFishProducts', 'MntWines']].mean()
+
+cluster_centers = pd.DataFrame(kmeans.cluster_centers_, columns=['MntGoldProds', 'MntFishProducts', 'MntWines'])
+
+X['Cluster'] = kmeans.labels_
+WGF = px.scatter_3d(X, x='MntGoldProds', y='MntFishProducts', z='MntWines', color='Cluster',color_discrete_map={'0': 'red', '1': 'blue', '2': 'green', '3': 'yellow'},
+                   
+                    labels={'Cluster': 'Cluster'})
+WGF.add_trace(px.scatter_3d(cluster_centers, x='MntGoldProds', y='MntFishProducts', z='MntWines').data[0])
+WGF.update_traces(marker_size = 4)
+WGF.update_layout(width=900,
+    height=800)
+WGF.update_layout(
+    legend=dict(
+        x=0,  # Positionnement de la légende à gauche du graphique
+        y=0.5  # Ajustez la position verticale de la légende si nécessaire
+    )
+)
+#2ND GRAPH 3D KMEANS
+X = data[['Income', 'MntWines', 'Year_Birth']]
+kmeans = KMeans(n_clusters=4)  
+kmeans.fit(X)
+data['Cluster'] = kmeans.labels_
+
+cluster_stats = data.groupby('Cluster')[['Income', 'MntWines', 'Year_Birth']].mean()
+cluster_centers = pd.DataFrame(kmeans.cluster_centers_, columns=['Income', 'MntWines', 'Year_Birth'])
+X['Cluster'] = kmeans.labels_
+
+YIW = px.scatter_3d(data, x='Income', y='MntWines', z='Year_Birth', color='Cluster',
+                     labels={'Cluster': 'Cluster'},
+                     color_discrete_map={'0': 'red', '1': 'blue', '2': 'green', '3': 'yellow'},
+                     title='Graphique 3D des Clusters avec KMeans')
+
+YIW.add_trace(px.scatter_3d(cluster_centers, x='Income', y='MntWines', z='Year_Birth').data[0])
+
+YIW.update_traces(marker_size=4)
+
+YIW.update_layout(width=900, height=800)
+
+
