@@ -23,6 +23,19 @@ data = data[(data["Income"]<400000)&(data["Year_Birth"]>1920)]
 data.dropna(inplace=True)
 
 
+# # 3D INCOME YEAR
+# fig = go.Figure(data=[go.Scatter3d(
+#     x=data['Income'],
+#     y=data['Year_Birth'],
+#     z=data['education_mapped'],
+#     mode='markers',
+#     marker=dict(
+#         size=3,
+#         color=df[hue],        # Utilisation de la colonne actuelle pour la couleur
+#         colorscale='Greens', # Choix de la palette de couleurs
+#         opacity=0.8
+#     )
+# )])
 
 
 
@@ -125,6 +138,7 @@ boxplotsO.add_trace(go.Box(x=data["sp_fish"], name="Fish"), row=2, col=2)
 boxplotsO.add_trace(go.Box(x=data["sp_sweet"], name="Sweet"), row=3, col=1)
 boxplotsO.add_trace(go.Box(x=data["sp_gold"], name="Gold"), row=3, col=2)
 boxplotsO.update_layout( height=1000, width=1200)
+
 
 
 ################################CLUSTERING#############################
