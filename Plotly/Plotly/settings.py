@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_sass',
+    'sass_processor'
 ]
 
 MIDDLEWARE = [
@@ -117,8 +119,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'Plotly', 'static'),
+    os.path.join(BASE_DIR, 'Plotly', 'staticfiles','static'),
+    os.path.join(BASE_DIR, 'Plotly', 'staticfiles','static_scss'),  # Include this directory
 ]
+
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR,'Plotly','static','static_scss')
+
+STATIC_ROOT = os.path.join(BASE_DIR,'Plotly','staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

@@ -1,5 +1,9 @@
 import plotly.express as px
 from django.shortcuts import render
+from .analyse import first_graph,fig,heat,boxplotsO,income ,elbow,PCA2D,PCA3D
+
+def page_2(request):
+    return render(request, 'page_2.html')
 
 
 
@@ -30,7 +34,26 @@ def plotly(request):
     line_chart = fig_line.to_html(full_html=False, include_plotlyjs=False)
     pie_chart = fig_pie.to_html(full_html=False, include_plotlyjs=False)
 
+    first_graph_html = first_graph.to_html(full_html=False, include_plotlyjs=False)
+    fig2_html= fig.to_html(full_html=False, include_plotlyjs=False)
+    #fig3_html= fig3.to_html(full_html=False, include_plotlyjs=False)
+    heat_html= heat.to_html(full_html=False, include_plotlyjs=False)
+    boxplotsO_html= boxplotsO.to_html(full_html=False, include_plotlyjs=False)
+    income_html= income.to_html(full_html=False, include_plotlyjs=False)
+    elbow_html= elbow.to_html(full_html=False, include_plotlyjs=False)
+    PCA2D_html= PCA2D.to_html(full_html=False, include_plotlyjs=False)
+    PCA3D_html= PCA3D.to_html(full_html=False, include_plotlyjs=False)
     return render(request, "plotly.html", {"bar_chart": bar_chart ,
                                            "scatter_chart" : scatter_chart, 
                                            "line_chart" : line_chart, 
-                                           "pie_chart": pie_chart})
+                                           "pie_chart": pie_chart,
+                                           "first_graph":first_graph_html,
+                                           "fig2_html" : fig2_html,
+                                           "income_html": income_html,
+                                           "heat":heat_html  ,
+                                           "boxplotsO":boxplotsO_html,
+                                           "elbow": elbow_html,
+                                           "PCA2D":PCA2D_html,
+                                           "PCA3D":PCA3D_html
+                                           
+                                           })
