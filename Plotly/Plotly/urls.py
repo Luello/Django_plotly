@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import plotly
+from .views import plotly,page_2
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('plotly/', plotly, name='plotly')
+    path('plotly/', plotly, name='plotly'),
+    path('p2/', page_2, name='page_2')
 ]
