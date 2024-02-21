@@ -241,7 +241,7 @@ kmeans = KMeans(n_clusters=3)
 kmeans.fit(df_pca)
 df_pca['Cluster'] = kmeans.labels_.astype(str)  
 
-PCA2D = px.scatter(df_pca, x='PC1', y='PC2', color='Cluster', title='PCA + Clustering',
+PCA2D = px.scatter(df_pca, x='PC1', y='PC2', color='Cluster',
                  labels={'PC1': 'Principal Component 1', 'PC2': 'Principal Component 2'},
                  color_discrete_sequence=px.colors.qualitative.Set1)
 PCA2D.update_layout(
