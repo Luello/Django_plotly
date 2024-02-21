@@ -205,3 +205,68 @@ PCA3D.update_layout(scene=dict(
                     yaxis_title='PC2',
                     zaxis_title='PC3'),
                   )
+
+
+#PARTIE RFM ; Réimport du dataset
+
+
+df = pd.read_csv(f"{BASE_DIR}\\Plotly\\staticfiles\\static\\marketing_campaign.csv",sep="\t")  
+df = df[(df["Income"]<400000)&(df["Year_Birth"]>1920)]
+
+df["Frequency"] = df["NumWebPurchases"] + df["NumCatalogPurchases"] + df["NumStorePurchases"]
+df["MonetaryValue"] = df["MntWines"] + df["MntFruits"] + df["MntWines"] + df["MntMeatProducts"]+ df["MntFishProducts"] + df["MntSweetProducts"] + df["MntGoldProds"]
+
+Rlabel = range(4,0,-1)
+Flabel = range(1,5)
+Mlabel = range(1,5)
+
+Rgrp = pd.qcut(df["Recency"], q=4, labels = Rlabel)
+Fgrp = pd.qcut(df["Frequency"], q=4, labels = Flabel)
+Mgrp = pd.qcut(df["MonetaryValue"], q=4, labels = Mlabel)
+
+df["R"] = Rgrp.values
+df["F"] = Fgrp.values
+df["M"] = Mgrp.values
+
+df["RFM_Concat"] = df.apply(lambda x : str(x["R"]) + str(x["F"]) + str(x["M"]), axis=1 )
+df["Score"] = df[['R',"F","M"]].sum(axis=1)
+
+def RFMlevel(df):
+    if(df['Score']>9):
+        return "1Première"
+    elif (df["Score"]>9)and(df["Score"] >=7): return "2Champions"
+    elif (df["Score"]>7)and(df["Score"] >=6): return "3Loyal"
+    elif (df["Score"]>6)and(df["Score"] >=5): return "4Potential"
+    elif (df["Score"]>5)and(df["Score"] >=4): return "5Promising"
+    elif (df["Score"]>4)and(df["Score"] >=3): return "6Need attention"
+    else : return "7Require activation"
+
+df["RFM_Level"] = df.apply(RFMlevel,axis=1)
+
+df_stats= df.groupby("RFM_Level").agg({
+    "Recency":"mean",
+    'Frequency':"mean",
+    "MonetaryValue":["mean",'count']
+}).round(1)
+df_stats.columns = df_stats.columns.droplevel()
+df_stats.columns = ["Recency_Mean","Frequency_Mean","MonetaryValue_Mean","MonetaryValue_Count"]
+
+#graph
+
+df_fig = pd.DataFrame({
+    'label': df_stats.index.unique().tolist(),
+    'size': df_stats["Frequency_Mean"],
+    'color': ["Green","Orange","Purple","Maroon","Pink","Teal"]
+})
+
+# Créez un diagramme de "trésors"(mdrr) avec Plotly Express
+figRFM = px.treemap(df_fig, 
+                 path=['label'], 
+                 values='size',
+                 color='color',
+                 color_discrete_map={i: c for i, c in enumerate(["Green","Orange","Purple","Maroon","Pink","Teal"])})
+
+figRFM.update_layout(
+                        width=800, 
+                        height=500
+                    )
