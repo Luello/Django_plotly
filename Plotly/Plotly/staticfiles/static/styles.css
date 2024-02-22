@@ -1,3 +1,12 @@
+body {
+  --fl-heart-size: 2vw;
+  --fl-sway: 10;
+  background: #0f0e0e;
+  min-height: 100vh;
+}
+
+
+
 
 /* Styles pour le titre animé */
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
@@ -359,3 +368,8 @@
     background-clip: text; /* Pour que le fond dégradé apparaisse dans le texte */
     color: transparent; /* Rend le texte transparent */
 }
+
+
+
+
+

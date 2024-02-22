@@ -6,6 +6,8 @@ from .analyse import first_graph,fig,heat,boxplotsO,income ,elbow,PCA2D,PCA3D,fi
 def page_2(request):
     return render(request, 'page_2.html')
 
+def final_1(request):
+    return render(request, 'final_1.html')
 
 
 def plotly(request):
