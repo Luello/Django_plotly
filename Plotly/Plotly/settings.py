@@ -119,11 +119,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'Plotly', 'staticfiles','static'),
-    os.path.join(BASE_DIR, 'Plotly', 'staticfiles','static_scss'),  # Include this directory
+    os.path.join(BASE_DIR, 'Plotly', 'staticfiles','static'),  # Include this directory
 ]
 
-SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR,'Plotly','static','static_scss')
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR,'Plotly','static')
 
 STATIC_ROOT = os.path.join(BASE_DIR,'Plotly','staticfiles')
 # Default primary key field type

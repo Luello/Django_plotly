@@ -103,7 +103,7 @@ data['children'] = data['Kidhome'] + data['Teenhome']
 df_encoded = data[['client_age', 'Education', 'Marital_Status', 'Recency', 'Income', 'Spending', 'children', 'sp_wines',
                    'sp_fruits', 'sp_meat', 'sp_fish', 'sp_sweet', 'sp_gold', 'Frequency']]
 
-for col in df_encoded.columns:
+for col in df_encoded.select_dtypes(include='number'):
     decile_threshold = df_encoded[col].quantile(0.99)  
     df_encoded = df_encoded[df_encoded[col] <= decile_threshold]
     
@@ -150,13 +150,20 @@ df_numeric = df_numeric[['Income', 'sp_wines', 'sp_fruits',
                          'sp_meat', 'sp_fish', 'sp_sweet'
                         ]]
 for col in df_numeric.columns:
-    decile_threshold = df[col].quantile(0.99)  
+    decile_threshold = df[col].quantile(0.999)  
     df = df[df[col] <= decile_threshold]
 
+df=df.dropna()
 
 
 # Mapper les valeurs de la colonne 'education' en utilisant le dictionnaire de mappage
 df['education_mapped'] = df['Education'].map(education_mapping)
+
+
+# Encoder les catégorielles sur df
+encoder = LabelEncoder()
+for col in df.select_dtypes(include='object').columns:
+    df[col] = encoder.fit_transform(df[col])
 
 #sp_fruits
 green_3D_1 = go.Figure(data=[go.Scatter3d(
@@ -239,8 +246,13 @@ elbow.update_layout(
 
 
 ####PCA 2D PLOT
+
+X = df_encoded.select_dtypes(include='number') #
+scaler = StandardScaler() #
+X_scaled = scaler.fit_transform(X) #
+
 pca = PCA(n_components=2)
-X_pca = pca.fit_transform(df_encoded)
+X_pca = pca.fit_transform(X_scaled) #
 
 df_pca = pd.DataFrame(data=X_pca, columns=['PC1', 'PC2'])
 
@@ -257,7 +269,7 @@ PCA2D.update_layout(
 )
 #PCA3D
 pca_3d = PCA(n_components=3)
-X_pca_3d = pca_3d.fit_transform(df_encoded)
+X_pca_3d = pca_3d.fit_transform(X_scaled) #
 
 df_pca_3d = pd.DataFrame(data=X_pca_3d, columns=['PC1', 'PC2', 'PC3'])
 
