@@ -98,20 +98,13 @@ data['Spending'] = data['sp_wines'] + data['sp_fruits'] + data['sp_meat'] + data
 data["Frequency"] = data["NumWebPurchases"] + data["NumCatalogPurchases"] + data["NumStorePurchases"]
 data['children'] = data['Kidhome'] + data['Teenhome']
 
-
-
 df_encoded = data[['client_age', 'Education', 'Marital_Status', 'Recency', 'Income', 'Spending', 'children', 'sp_wines',
                    'sp_fruits', 'sp_meat', 'sp_fish', 'sp_sweet', 'sp_gold', 'Frequency']]
 
-for col in df_encoded.columns:
-    decile_threshold = df_encoded[col].quantile(0.99)  
-    df_encoded = df_encoded[df_encoded[col] <= decile_threshold]
-    
 label_encoder = LabelEncoder()
 for column in df_encoded.columns:
     if df_encoded[column].dtype == 'object':
         df_encoded[column] = label_encoder.fit_transform(df_encoded[column])
-
 
 corr_matrix = df_encoded.corr()
 
