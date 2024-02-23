@@ -7,6 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from sklearn.preprocessing import LabelEncoder
+from IPython.display import HTML
 
 
 import warnings
@@ -228,7 +229,7 @@ from sklearn.decomposition import PCA
 sum_of_sq_dist = {}
 for k in range(1,12):
     kmean = KMeans(n_clusters= k, init= 'k-means++', max_iter= 1000)
-    km = kmean.fit(df_encoded)
+    km = kmean.fit(df)
     sum_of_sq_dist[k] = km.inertia_
 
 trace = go.Scatter(x=list(sum_of_sq_dist.keys()), y=list(sum_of_sq_dist.values()), mode='lines+markers')
@@ -244,7 +245,7 @@ elbow.update_layout(
 
 ####PCA 2D PLOT
 
-X = df_encoded.select_dtypes(include='number') #
+X = df.select_dtypes(include='number') #
 scaler = StandardScaler() #
 X_scaled = scaler.fit_transform(X) #
 
@@ -264,6 +265,7 @@ PCA2D.update_layout(
     width=1000,
     height=800
 )
+
 #PCA3D
 pca_3d = PCA(n_components=3)
 X_pca_3d = pca_3d.fit_transform(X_scaled) #
@@ -282,12 +284,41 @@ PCA3D = go.Figure(data=[go.Scatter3d(
     marker=dict(color=df_pca_3d['Cluster'], colorscale='Viridis', size=5),
 )])
 
+
 PCA3D.update_layout(scene=dict(
                     xaxis_title='PC1',
                     yaxis_title='PC2',
                     zaxis_title='PC3'), width=1000,
     height=800
                   )
+
+
+# copy df for proper analysis based on kmeans cluster (4 of them)
+
+df_analysis = df.copy()
+df_analysis["kclusters"] = kmeans_3d.labels_
+
+df_means = pd.DataFrame(index=df_analysis["kclusters"].unique())
+
+
+for i in ["Income", "Recency", "Year_Birth"]:
+    df_means = pd.merge(
+        df_means, 
+        df_analysis[["kclusters",i]].groupby(by="kclusters").mean(),
+        how="left",left_index=True,right_on="kclusters")
+
+for i in ["Income", "Recency", "Year_Birth"]:
+    df_means = pd.merge(
+        df_means, 
+        df_analysis[["kclusters",i]].groupby(by="kclusters").median(),
+        how="left",left_index=True,right_on="kclusters")
+
+
+df_means.columns = ["mean_income","mean_recency","mean_Birth","median_income","median_recency","median_Birth"]
+
+df_means = round(df_means,2)
+df_means.sort_index(inplace=True)
+
 
 
 #PARTIE RFM ; Réimport du dataset
