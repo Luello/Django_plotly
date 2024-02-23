@@ -1,6 +1,6 @@
 import plotly.express as px
 from django.shortcuts import render
-from .analyse import first_graph,fig,heat,boxplotsO,income ,elbow,PCA2D,PCA3D,figRFM, WGF,YIW,green_3D_1,green_3D_2
+from .analyse import first_graph,fig,heat,boxplotsO,income ,elbow,PCA2D,PCA3D,figRFM, WGF,YIW,green_3D_1,green_3D_2,df_means
 
 
 def page_2(request):
@@ -53,6 +53,7 @@ def plotly(request):
     WGF_html= WGF.to_html(full_html=False, include_plotlyjs=False)
     green_3D_1_html=green_3D_1.to_html(full_html=False, include_plotlyjs=False)
     green_3D_2_html=green_3D_2.to_html(full_html=False, include_plotlyjs=False)
+    df_meansHTML = df_means.to_html(classes='table table-stripped')
 
     return render(request, "plotly.html", {"bar_chart": bar_chart ,
                                            "scatter_chart" : scatter_chart, 
@@ -74,5 +75,6 @@ def plotly(request):
                                            "figRFM":figRFM_html,
                                            "YIW":YIW_html,
                                            "WGF":WGF_html,
+                                           "DataFrame_means":df_meansHTML
                    
                                            })
