@@ -101,13 +101,10 @@ data['children'] = data['Kidhome'] + data['Teenhome']
 df_encoded = data[['client_age', 'Education', 'Marital_Status', 'Recency', 'Income', 'Spending', 'children', 'sp_wines',
                    'sp_fruits', 'sp_meat', 'sp_fish', 'sp_sweet', 'sp_gold', 'Frequency']]
 
-<<<<<<< HEAD
-=======
 for col in df_encoded.select_dtypes(include='number'):
     decile_threshold = df_encoded[col].quantile(0.99)  
     df_encoded = df_encoded[df_encoded[col] <= decile_threshold]
     
->>>>>>> d326e2bccbe68926e7914baf3ffe93103f7d0133
 label_encoder = LabelEncoder()
 for column in df_encoded.columns:
     if df_encoded[column].dtype == 'object':
